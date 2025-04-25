@@ -1,8 +1,3 @@
-/*
- * photographerTemplate.js
- * Crée la carte d'utilisateur pour chaque photographe
- */
-
 /* exported photographerTemplate */
 function photographerTemplate(data) {
   // On extrait directement les propriétés utiles de l'objet data
