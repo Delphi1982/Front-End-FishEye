@@ -14,7 +14,7 @@ function injectFocusStyle() {
     }
     /* Bordure épaisse quand focus au clavier */
     :focus-visible {
-      outline: 3px solid #ff7f50 !important;
+      outline: 3px solid #000 !important;
       outline-offset: 4px;
     }
     /* Permet à la bordure du cœur de dépasser si nécessaire */

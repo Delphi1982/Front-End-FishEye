@@ -2,15 +2,26 @@
 let galleryItems = [];
 let currentIndex = 0;
 
+// On retient l’élément qui avait le focus avant d’ouvrir la lightbox
+let lastFocusedElement = null;
+
 /**
  * Ferme la lightbox (fenêtre modale plein écran)
  */
 function closeLightbox() {
   const lightboxModal = document.getElementById("lightbox-modal");
-  if (!lightboxModal) return;                    // Si pas de modal, on quitte
-  lightboxModal.style.display = "none";          // Cache la modal
-  lightboxModal.setAttribute("aria-hidden", "true"); 
-  document.getElementById("main").removeAttribute("aria-hidden"); 
+  if (!lightboxModal) return;
+
+  // Masquer la modale
+  lightboxModal.style.display = "none";
+  lightboxModal.setAttribute("aria-hidden", "true");
+  document.getElementById("main").removeAttribute("aria-hidden");
+
+  // Restaurer le focus sur l’élément d’origine
+  if (lastFocusedElement) {
+    lastFocusedElement.focus();
+    lastFocusedElement = null;
+  }
 }
 
 /**
@@ -18,17 +29,15 @@ function closeLightbox() {
  * @param {HTMLElement} modal  L’élément DOM de la lightbox
  */
 function updateLightboxContent(modal) {
-  const item = galleryItems[currentIndex];        // Le média courant
-  const title = item.dataset.title;               // Son titre depuis data-title
+  const item = galleryItems[currentIndex];
+  const title = item.dataset.title;
   const mediaContainer = modal.querySelector('.lightbox-media-container');
-  mediaContainer.innerHTML = "";                  // On vide l’ancien média
+  mediaContainer.innerHTML = "";
 
   // Si le média contient une vidéo
   const videoEl = item.querySelector("video");
   if (videoEl) {
-    // On crée un <video> pour la lightbox
     const videoElement = document.createElement("video");
-    // On récupère la source depuis <source> ou directement src
     const sourceEl = videoEl.querySelector("source");
     videoElement.src = sourceEl ? sourceEl.src : videoEl.src;
     videoElement.controls = true;
@@ -55,22 +64,20 @@ function updateLightboxContent(modal) {
  * @param {HTMLElement} item  L’élément .gallery-item cliqué
  */
 function openLightbox(item) {
-  console.log("Ouverture de la lightbox");
-  currentIndex = galleryItems.indexOf(item);      // Met à jour l’index
+  // 1) Retenir l’élément qui avait le focus
+  lastFocusedElement = document.activeElement;
 
-  // Cherche si la lightbox existe déjà
+  // 2) Définir l’index courant et créer la modale si besoin
+  currentIndex = galleryItems.indexOf(item);
   let lightboxModal = document.getElementById("lightbox-modal");
 
-  // Si elle n’existe pas, on la crée
   if (!lightboxModal) {
     lightboxModal = document.createElement("div");
     lightboxModal.id = "lightbox-modal";
     lightboxModal.classList.add("lightbox-modal");
     lightboxModal.setAttribute("aria-hidden", "true");
-
-    // On injecte le HTML de la lightbox
     lightboxModal.innerHTML = `
-      <div class="lightbox-container">
+      <div class="lightbox-container" tabindex="0">
         <button class="close-lightbox" aria-label="Fermer">×</button>
         <div class="image-frame">
           <button class="prev-button" aria-label="Média précédent">❮</button>
@@ -82,93 +89,88 @@ function openLightbox(item) {
         </div>
       </div>
     `;
-    // On place la lightbox dans le DOM
     document.getElementById("lightbox-parent").appendChild(lightboxModal);
 
-    // Fermeture au clic sur la croix
-    lightboxModal.querySelector(".close-lightbox")
-      .addEventListener("click", () => closeLightbox());
-
-    // Bouton suivant
-    lightboxModal.querySelector(".next-button")
-      .addEventListener("click", event => {
-        event.stopPropagation();
-        currentIndex = (currentIndex + 1) % galleryItems.length;
-        updateLightboxContent(lightboxModal);
-      });
-
-    // Bouton précédent
-    lightboxModal.querySelector(".prev-button")
-      .addEventListener("click", event => {
-        event.stopPropagation();
-        currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
-        updateLightboxContent(lightboxModal);
-      });
-
-    // Fermer si on clique en dehors de la boîte
-    lightboxModal.addEventListener("click", event => {
-      if (!event.target.closest(".lightbox-container")) {
-        console.log("Clic en dehors, on ferme");
-        closeLightbox();
-      }
+    // Listeners de contrôle
+    lightboxModal.querySelector(".close-lightbox").addEventListener("click", closeLightbox);
+    lightboxModal.querySelector(".next-button").addEventListener("click", e => {
+      e.stopPropagation();
+      currentIndex = (currentIndex + 1) % galleryItems.length;
+      updateLightboxContent(lightboxModal);
+    });
+    lightboxModal.querySelector(".prev-button").addEventListener("click", e => {
+      e.stopPropagation();
+      currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
+      updateLightboxContent(lightboxModal);
+    });
+    lightboxModal.addEventListener("click", e => {
+      if (!e.target.closest(".lightbox-container")) closeLightbox();
     });
   }
 
-  // On met à jour le contenu pour l’élément courant
+  // 3) Mettre à jour et afficher
   updateLightboxContent(lightboxModal);
-
-  // On affiche la lightbox et cache le contenu principal
   lightboxModal.style.display = "flex";
   lightboxModal.setAttribute("aria-hidden", "false");
   document.getElementById("main").setAttribute("aria-hidden", "true");
 
-  // On met le focus sur le conteneur pour l’accessibilité
+  // 4) Focus trap & escape
   const modalContainer = lightboxModal.querySelector(".lightbox-container");
-  modalContainer.setAttribute("tabindex", "0");
   modalContainer.focus();
-
-  // Navigation clavier dans la lightbox
   modalContainer.addEventListener("keydown", function(e) {
+    // Navigation flèches…
     if (e.key === "ArrowLeft") {
       e.preventDefault();
       currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
       updateLightboxContent(lightboxModal);
-    } else if (e.key === "ArrowRight") {
+      return;
+    }
+    if (e.key === "ArrowRight") {
       e.preventDefault();
       currentIndex = (currentIndex + 1) % galleryItems.length;
       updateLightboxContent(lightboxModal);
-    } else if (e.key === "Tab") {
-      // Gestion du focus cyclique dans la modal
+      return;
+    }
+
+    // Cycle Tab
+    if (e.key === "Tab") {
       const focusable = Array.from(
-        lightboxModal.querySelectorAll("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])")
+        lightboxModal.querySelectorAll(
+          "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"
+        )
       );
-      if (focusable.length === 0) return e.preventDefault();
-      const firstEl = focusable[0];
-      const lastEl  = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === firstEl) {
-        e.preventDefault(); lastEl.focus();
-      } else if (!e.shiftKey && document.activeElement === lastEl) {
-        e.preventDefault(); firstEl.focus();
+      if (!focusable.length) return e.preventDefault();
+      const first = focusable[0];
+      const last  = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
+      return;
+    }
+
+    // Échap ferme la lightbox et restaure le focus
+    if (e.key === "Escape" || e.key === "Esc") {
+      e.preventDefault();
+      closeLightbox();
     }
   });
 }
 
 /**
  * Ajoute un clic et un focus aux éléments de la galerie
- * pour ouvrir la lightbox
  */
 function addModalOpenEventListeners() {
-  // On récupère tous les .gallery-item dans galleryItems
   galleryItems = Array.from(document.querySelectorAll(".gallery-item"));
-  // Pour chaque image ou vidéo, on ouvre la lightbox au clic
-  document.querySelectorAll(".gallery-item img, .gallery-item video")
-    .forEach(media => {
-      media.addEventListener("click", event => {
-        event.stopPropagation();
-        openLightbox(media.closest(".gallery-item"));
-      });
+  document.querySelectorAll(".gallery-item img, .gallery-item video").forEach(media => {
+    media.addEventListener("click", e => {
+      e.stopPropagation();
+      openLightbox(media.closest(".gallery-item"));
     });
+  });
 }
 
 // Au chargement de la page, on active les clics sur la galerie

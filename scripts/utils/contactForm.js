@@ -110,14 +110,24 @@ function displayModal() {
   }
 }
 
-// Ferme la modale sans rechargement ni redirection
 function closeModal() {
   const modal = document.getElementById("contact-modal");
   if (modal) {
+    // 1) Relocaliser le focus : ici on renvoie sur le bouton "Contactez-moi"
+    const trigger = document.querySelector('.contact_button_profile');
+    if (trigger) {
+      trigger.focus();
+    } else {
+      // ou, en dernier recours, enlever le focus du bouton actif
+      document.activeElement.blur();
+    }
+
+    // 2) On peut maintenant masquer la modale sans warning
     modal.style.display = "none";
     modal.setAttribute("aria-hidden", "true");
     document.getElementById("main").removeAttribute("aria-hidden");
   } else {
-    console.error("Le formulaire n'a pas été trouvée.");
+    console.error("Le formulaire n'a pas été trouvé.");
   }
 }
+
