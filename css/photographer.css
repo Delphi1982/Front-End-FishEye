@@ -50,7 +50,6 @@
 }
 
 
-
 /* Menu de tri */
 .sort-section {
   margin: 20px 100px;
@@ -167,23 +166,43 @@
   cursor: pointer;
 }
 
-/* Style texte des likes */
-.likes {
-  font-size: 1.2em;
-  font-weight: bold;
-}
 
-/* Style cœur */
+/* Style texte des likes */
 .heart {
   font-size: 1.4em;
   color: #901C1C;
   cursor: pointer;
-  border: none;
   background: transparent;
+  border: none;
   outline: none;
+
+  /* transition pour couleur et taille */
+  transition: transform 0.15s ease-in-out, color 0.15s ease-in-out;
 }
 
-/* Pied de page */
+.likes {
+  font-size: 1.2em;
+  font-weight: bold;
+
+  /* transition pour taille */
+  transition: transform 0.15s ease-in-out;
+}
+
+/* état “like” actif */
+.heart.heart-active {
+  color: #901C1C;        /* rouge vif */
+  transform: scale(1.2); /* grossissement */
+}
+
+.likes.heart-active {
+  color: #901C1C;
+  transform: scale(1.2);
+}
+
+
+/* ============================= */
+/*            FOOTER             */
+/* ============================= */
 footer {
   display: flex;
   justify-content: space-between;
