@@ -1,0 +1,201 @@
+/* ============================ */
+/*         Contact Modal        */
+/* ============================ */
+
+
+.contact-modal {
+    display: flex; 
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(107, 104, 104, 0.5); 
+    z-index: 1000;
+  }
+  
+  .contact-modal-container {
+    background-color: #D3573C;
+    padding: 20px 30px;
+    border-radius: 5px;
+    width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    position: relative;
+    font-family: 'DM Sans', sans-serif;
+  }
+  
+  .contact-modal-container h2 {
+    font-size: 2.5em; 
+    line-height: 45px;
+    margin-top: 0;
+    margin-bottom: 0.3em;
+    font-weight: normal;
+  }
+  
+  .contact-modal-container label {
+    display: block;
+    font-size: 1.5em; 
+    margin-bottom: 0.1em;
+  }
+  
+  .contact-modal-container input,
+  .contact-modal-container textarea {
+    width: 93.5%;
+    padding: 12px; 
+    margin-bottom: 0.6em;
+    border: none; 
+    border-radius: 3px;
+    font-size: 1em; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+  }
+  
+  .contact-modal-container input::placeholder,
+  .contact-modal-container textarea::placeholder {
+    visibility: hidden;
+  }
+  
+  .contact-modal-container textarea {
+    resize: none;
+    height: 100px;
+  }
+  
+  .submit-button {
+    background-color: #901C1C;
+    color: white;
+    padding: 12px 20px; 
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 1em; 
+  }
+  
+  .submit-button:hover {
+    background-color: #901C1C;
+  }
+  
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 30px;
+    font-weight: normal;
+    padding: 0;
+    background: none;
+    border: none;
+    font-size: 4em;
+    cursor: pointer;
+    color: #fff;
+  }
+  
+  input::placeholder,
+  textarea::placeholder {
+    color: #525252;
+    font-size: 1em;
+  }
+  
+
+
+  /* ============================ */
+  /*        Lightbox Modal        */
+  /* ============================ */
+
+
+  .lightbox-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(107, 104, 104, 0.5);
+    z-index: 1000;
+  }
+  
+  .lightbox-container {
+    background: #fff; 
+    border-radius: 3px; 
+    padding: 20px; 
+    text-align: center;
+    max-width: 800px; 
+    width: 90%;
+    position: relative;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+  }
+  
+  .lightbox-image-texte {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .image-frame {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+
+  /* Style pour la zone média */
+.lightbox-media-container video,
+.lightbox-media-container img {
+  max-width: 90%;
+  height: 80vh;
+  display: block;
+  margin: 0 auto;
+}
+  
+  /* Boutons navigation */
+  .prev-button,
+  .next-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none; 
+    border: none;
+    color: #901C1C; 
+    font-size: 3rem; 
+    cursor: pointer;
+    padding: 0 20px;
+  }
+  
+  .prev-button {
+    left: -20px; 
+  }
+  
+  .next-button {
+    right: -20px; 
+  }
+  
+  .prev-button:hover,
+  .next-button:hover {
+    color: #901C1C; 
+  }
+  
+  /* Bouton de fermeture lightbox */
+  .close-lightbox {
+    z-index: 1;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none; 
+    border: none; 
+    color: #901C1C; 
+    font-size: 4rem;
+    cursor: pointer;
+  }
+  
+  /* Légende lightbox */
+  .lightbox-caption {
+    margin-top: 10px;
+    font-size: 1rem;
+    color: #901C1C;
+    font-family: 'DM Sans', sans-serif;
+    text-align: left;
+    padding-left: 20px;
+
+    width: 100%;
+  }
+  

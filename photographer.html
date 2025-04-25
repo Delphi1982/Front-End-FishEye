@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <title>Fisheye - Photographe</title>
+    <link href="css/style.css" rel="stylesheet" />
+    <link href="css/modales.css" rel="stylesheet" />
+    <link rel="icon" type="image/png" href="assets/favicon.png" />
+    <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Bannière du site avec logo renvoyant à l’accueil -->
+    <header role="banner">
+      <a href="index.html" aria-label="Retour à la page d'accueil">
+        <img src="assets/images/logo.png" class="logo" alt="Logo Fisheye" />
+      </a>
+    </header>
+
+    <!-- Contenu principal de la page photographe -->
+    <main id="main" role="main" tabindex="-1">
+      <!-- Informations du photographe (titre, lieu, slogan, photo, bouton contact) -->
+      <section class="photograph-header" aria-labelledby="photographer-info">
+        <div class="text-info" id="photographer-info">
+          <h1 class="photographer-name">Nom du photographe</h1>
+          <p class="localisation">Localisation</p>
+          <p class="photographer-tagline">Slogan du photographe</p>
+        </div>
+        <!-- Bouton pour ouvrir le formulaire de contact -->
+        <button
+          class="contact_button_profile"
+          onclick="displayModal()"
+          aria-label="Contacter le photographe"
+        >
+          Contactez-moi
+        </button>
+        <!-- Portrait du photographe -->
+        <img src="" alt="Photo de profil du photographe" class="profile-pic" />
+      </section>
+
+      <!-- Section de tri des médias (popularité, date, titre) -->
+      <section class="sort-section" aria-label="Trier les médias">
+        <label class="sort-label" for="sort">Trier par</label>
+        <div class="system-sort">
+          <div class="sort-arrow">
+            <img src="assets/icons/fleche.svg" alt="Ouvrir le menu de tri" class="fleche-haut" />
+          </div>
+          <ul>
+            <li id="sort-popularite">Popularité</li>
+            <li id="sort-date">Date</li>
+            <li id="sort-titre">Titre</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Galerie des images et vidéos -->
+      <section class="gallery" aria-label="Galerie des médias"></section>
+    </main>
+
+    <!-- Conteneur vide pour injecter la lightbox dynamiquement -->
+    <div id="lightbox-parent"></div>
+
+    <!-- Pied de page avec total des likes et tarif journalier -->
+    <footer role="contentinfo">
+      <div>
+        <p class="total-likes" aria-label="Total des likes"></p>
+        <p aria-hidden="true">&hearts;</p>
+      </div>
+      <p class="daily-rate" aria-label="Tarif journalier"></p>
+    </footer>
+
+    <!-- Scripts JavaScript chargés dans l’ordre -->
+    <script src="scripts/templates/media.js"></script>
+    <script src="/scripts/api.js"></script>
+    <script src="/scripts/utils/contactForm.js"></script>
+    <script src="/scripts/utils/lightbox.js"></script>
+    <script src="/scripts/utils/app.js"></script>
+    <script src="/scripts/pages/photographer.js"></script>
+  </body>
+</html>

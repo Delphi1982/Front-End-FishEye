@@ -1,0 +1,235 @@
+/* ============================= */
+/*     Header Photograph    */
+/* ============================= */
+.photograph-header {
+  background-color: #FAFAFA;
+  height: 250px;
+  margin: 20px 100px;
+  padding: 0 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.photograph-header .text-info h1 {
+  font-size: 2.5em;
+  color: #D3573C;
+  margin: 0;
+}
+
+.photograph-header .text-info .localisation {
+  color: #901C1C;
+  font-size: 1.3em;
+}
+
+.photograph-header .contact_button_profile {
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  padding: 11px;
+  width: 160px;
+  height: 60px;
+  border: none;
+  background-color: #901C1C;
+  border-radius: 3px;
+  cursor: pointer;
+  
+}
+
+.photograph-header .contact_button_profile:hover {
+  background-color: #D3573C;
+  color: black;
+}
+
+
+.photograph-header .profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+
+
+/* Menu de tri */
+.sort-section {
+  margin: 20px 100px;
+  font-size: 1.2em;
+  display: flex;
+  gap: 10px;
+}
+
+.sort-label{
+  margin-top: 25px;
+}
+
+.system-sort {
+  width: 170px;
+  position: relative;
+  
+}
+
+.system-sort .sort-arrow {
+  color: white;
+  font-size: 1.2em;
+  font-weight: bold;
+  position: absolute;
+  top: 35px;
+  right: 8px;
+}
+
+.system-sort ul {
+  color: white;
+  list-style: none;
+  padding: 20px 15px;
+  background-color: rgba(144, 28, 28, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 15px;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.open {
+  height: auto !important;
+  visibility: visible !important;
+}
+
+.direction-fleche {
+  transform: rotate(180deg);
+  transition: transform 0.3s ease-in-out;
+}
+
+.system-sort li {
+  padding-bottom: 15px;
+  border-bottom: 1px solid white;
+}
+
+#sort-titre {
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+}
+
+/* Galerie avec 3 colonnes */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 70px;
+  margin: 40px 100px;
+}
+
+.gallery-item {
+  width: 100%;
+  text-align: center;
+  background-color: white;
+  border-radius: 3px;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.gallery-item img,
+.gallery-item video {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+/* Conteneur du titre, likes et cœur */
+.gallery-item-p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.gallery-item-p div {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.gallery-item p {
+  font-size: 1.1em;
+}
+
+.gallery-item .title {
+  color: #901C1C;
+  font-weight: bold;
+}
+
+.gallery-item .likes {
+  font-size: 1em;
+}
+
+.gallery-item:hover {
+  transform: translateY(-10px);
+  cursor: pointer;
+}
+
+/* Style texte des likes */
+.likes {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+/* Style cœur */
+.heart {
+  font-size: 1.4em;
+  color: #901C1C;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  outline: none;
+}
+
+/* Pied de page */
+footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #D3573C;
+  color: black;
+  padding: 5px 20px;
+  font-size: 1em;
+  font-weight: bold;
+  border-radius: 3px 3px 0 0;
+  position: fixed;
+  bottom: 0;
+  right: 50px;
+  width: 200px;
+  height: 40px;
+}
+
+footer div {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.total-likes,
+.daily-rate {
+  margin: 0;
+  line-height: 1;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .photograph-header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: center;
+  }
+
+  .gallery {
+    margin: 20px;
+    grid-template-columns: 1fr;
+  }
+
+  footer {
+    width: 100%;
+    border-radius: 0;
+    position: static;
+    margin-top: 20px;
+  }
+}

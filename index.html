@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fisheye - Nos photographes</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css" />
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <link href="https://fonts.googleapis.com/css?family=DM+Sans&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    
+    <!-- En-tête du site, identifié comme “banner” pour l’accessibilité -->
+    <header role="banner">
+      <!-- Logo cliquable qui ramène à l’accueil -->
+      <a href="index.html" aria-label="Retour à l’accueil">
+        <img src="assets/images/logo.png" class="logo" alt="Logo Fisheye">
+      </a>
+      <!-- Titre de la page -->
+      <h1>Nos photographes</h1>
+    </header>
+
+    <!-- Contenu principal, identifié comme “main” pour l’accessibilité -->
+    <main id="main" role="main" tabindex="-1">
+      <!-- Section où la liste des photographes sera ajoutée via JavaScript -->
+      <section class="photographer_section" aria-label="Liste des photographes">
+        <!-- Les cartes photographe sont insérées ici par index.js -->
+      </section>
+    </main>
+
+    <!-- Modules JavaScript, dans l’ordre d’exécution -->
+    <script src="scripts/templates/photographer.js"></script>
+    <script src="scripts/api.js"></script>
+    <script src="scripts/pages/index.js"></script>
+
+  </body>
+</html>

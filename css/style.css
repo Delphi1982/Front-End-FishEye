@@ -1,0 +1,95 @@
+@import url("photographer.css");
+
+/* ============================= */
+/*              Body             */
+/* ============================= */
+body {
+    font-family: "DM Sans", sans-serif;
+    margin: 0;
+}
+
+/* ============================= */
+/*           Header              */
+/* ============================= */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+}
+
+.logo {
+    height: 50px;
+    margin-left: 100px;
+}
+
+h1 {
+    color: #901C1C;
+    margin-right: 100px;
+}
+
+/* ============================= */
+/*     Photographer Section      */
+/* ============================= */
+
+
+/* Conteneur de la section (grid) */
+.photographer_section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px 50px;
+    margin: 2px 0;
+}
+
+/* Carte photographe */
+.photographer_section article {
+    justify-self: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: white;
+    text-align: center;
+    width: 350px;
+    padding: 15px;
+    transition: transform 0.3s;
+}
+
+/* Image du photographe */
+.photographer_section article img {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+/* Nom du photographe */
+.photographer_section article h2 {
+    font-size: 2em;
+    color: #B4555B;
+    margin: 2px 0;
+}
+
+/* ============================= */
+/*       Photographer Info       */
+/* ============================= */
+.photographer-location {
+    font-size: 1em;
+    color: #842722;
+    font-weight: normal;
+    margin: 2px 0;
+}
+
+.photographer-tagline {
+    font-size: 1em;
+    font-weight: normal;
+    color: black;
+    margin: 2px 0;
+}
+
+.photographer-price {
+    font-size: 0.7em;
+    font-weight: normal;
+    color: grey;
+    margin: 2px 0;
+}
