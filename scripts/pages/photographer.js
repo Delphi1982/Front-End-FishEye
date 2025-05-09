@@ -108,9 +108,9 @@ function updateGallery(mediaList, photographer) {
  * Tri les médias quand on clique sur un critère (popularité, date, titre).
  */
 function handleSortModifie(photographerMedia, photographer) {
-  const byPop  = document.getElementById("sort-popularite");
-  const byDate = document.getElementById("sort-date");
-  const byTitle= document.getElementById("sort-titre");
+  const byPop   = document.getElementById("sort-popularite");
+  const byDate  = document.getElementById("sort-date");
+  const byTitle = document.getElementById("sort-titre");
 
   // Popularité
   byPop.addEventListener("click", () => {
@@ -258,8 +258,31 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // Mise en place des sections
+  // Mise en place du header
   updatePhotographerHeader(photographer);
+
+  // ──────────────── Gestion du focus clavier uniquement ─────────────────
+  const photographerRegion = document.querySelector(".photograph-header");
+  if (photographerRegion) {
+    // rendre tabbable et accessible
+    photographerRegion.setAttribute("role", "region");
+    photographerRegion.setAttribute("tabindex", "0");
+    photographerRegion.setAttribute("aria-labelledby", "photographer-info");
+
+    // détecteur de modalité
+    let hadKeyboardEvent = false;
+    window.addEventListener("keydown", () => { hadKeyboardEvent = true; }, true);
+    window.addEventListener("mousedown", () => { hadKeyboardEvent = false; }, true);
+
+    // n’autoriser le focus que si c’est par Tab
+    photographerRegion.addEventListener("focus", e => {
+      if (!hadKeyboardEvent) {
+        e.target.blur();
+      }
+    }, true);
+  }
+  // ───────────────────────────────────────────────────────────────────────
+
   updateDailyRate(photographer);
 
   const medias = data.media.filter(m => m.photographerId === id);

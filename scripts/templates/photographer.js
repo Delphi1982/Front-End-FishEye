@@ -15,7 +15,11 @@ function photographerTemplate(data) {
     const article = document.createElement("article");
 
     // Description pour les lecteurs d'écran
-    article.setAttribute("aria-label", `Profil du photographe ${name}`);
+    article.setAttribute(
+      "aria-label",
+      `Photographe : ${name}, ${city}, ${country}. "${tagline}". Tarif : ${price}€ par jour.`
+    );
+    
 
     // Lien cliquable vers la page du photographe
     const link = document.createElement("a");

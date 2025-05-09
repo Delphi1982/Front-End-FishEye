@@ -19,7 +19,14 @@
     <!-- Contenu principal de la page photographe -->
     <main id="main" role="main" tabindex="-1">
       <!-- Informations du photographe (titre, lieu, slogan, photo, bouton contact) -->
-      <section class="photograph-header" aria-labelledby="photographer-info">
+      <section
+        class="photograph-header"
+        role="region"
+        aria-roledescription="informations photographe"
+        tabindex="0"
+        aria-labelledby="photographer-info"
+      >
+
         <div class="text-info" id="photographer-info">
           <h1 class="photographer-name">Nom du photographe</h1>
           <p class="localisation">Localisation</p>

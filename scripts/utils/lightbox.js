@@ -1,8 +1,6 @@
 // Variables globales pour gérer la liste de médias et l’index courant
 let galleryItems = [];
 let currentIndex = 0;
-
-// On retient l’élément qui avait le focus avant d’ouvrir la lightbox
 let lastFocusedElement = null;
 
 /**
@@ -34,29 +32,33 @@ function updateLightboxContent(modal) {
   const mediaContainer = modal.querySelector('.lightbox-media-container');
   mediaContainer.innerHTML = "";
 
-  // Si le média contient une vidéo
-  const videoEl = item.querySelector("video");
+  const captionEl = modal.querySelector('#lightbox-caption');
+  let mediaElement;
+
+  // Si le média est une vidéo
+  const videoEl = item.querySelector('video');
   if (videoEl) {
-    const videoElement = document.createElement("video");
-    const sourceEl = videoEl.querySelector("source");
-    videoElement.src = sourceEl ? sourceEl.src : videoEl.src;
-    videoElement.controls = true;
-    videoElement.autoplay = true;
-    mediaContainer.appendChild(videoElement);
+    mediaElement = document.createElement('video');
+    const source = videoEl.querySelector('source');
+    mediaElement.src = source ? source.src : videoEl.src;
+    mediaElement.controls = true;
+    mediaElement.autoplay = true;
+    mediaElement.setAttribute('aria-label', title);
   } else {
     // Sinon, c’est une image
-    const imgEl = item.querySelector("img");
-    if (imgEl) {
-      const imgElement = document.createElement("img");
-      imgElement.src = imgEl.src;
-      imgElement.alt = imgEl.alt || "Média affiché";
-      imgElement.classList.add("lightbox-image");
-      mediaContainer.appendChild(imgElement);
-    }
+    const imgEl = item.querySelector('img');
+    mediaElement = document.createElement('img');
+    mediaElement.src = imgEl.src;
+    mediaElement.alt = imgEl.alt || title || 'Média affiché';
+    mediaElement.classList.add('lightbox-image');
   }
 
-  // Affiche le titre sous le média
-  modal.querySelector(".lightbox-caption").textContent = title;
+  // Lier le média à sa légende
+  mediaElement.setAttribute('aria-describedby', 'lightbox-caption');
+  mediaContainer.appendChild(mediaElement);
+
+  // Mettre à jour la légende (live region)
+  captionEl.textContent = title;
 }
 
 /**
@@ -66,98 +68,128 @@ function updateLightboxContent(modal) {
 function openLightbox(item) {
   // 1) Retenir l’élément qui avait le focus
   lastFocusedElement = document.activeElement;
-
-  // 2) Définir l’index courant et créer la modale si besoin
   currentIndex = galleryItems.indexOf(item);
+
   let lightboxModal = document.getElementById("lightbox-modal");
 
+  // 2) Si la modale n'existe pas encore, on la crée
   if (!lightboxModal) {
     lightboxModal = document.createElement("div");
     lightboxModal.id = "lightbox-modal";
     lightboxModal.classList.add("lightbox-modal");
+    lightboxModal.setAttribute("role", "dialog");
+    lightboxModal.setAttribute("aria-modal", "true");
+    lightboxModal.setAttribute("aria-labelledby", "lightbox-caption");
     lightboxModal.setAttribute("aria-hidden", "true");
-    lightboxModal.innerHTML = `
-      <div class="lightbox-container" tabindex="0">
-        <button class="close-lightbox" aria-label="Fermer">×</button>
-        <div class="image-frame">
-          <button class="prev-button" aria-label="Média précédent">❮</button>
-          <div class="lightbox-media-texte">
-            <div class="lightbox-media-container"></div>
-            <p class="lightbox-caption"></p>
-          </div>
-          <button class="next-button" aria-label="Média suivant">❯</button>
-        </div>
-      </div>
-    `;
-    document.getElementById("lightbox-parent").appendChild(lightboxModal);
 
-    // Listeners de contrôle
-    lightboxModal.querySelector(".close-lightbox").addEventListener("click", closeLightbox);
-    lightboxModal.querySelector(".next-button").addEventListener("click", e => {
-      e.stopPropagation();
-      currentIndex = (currentIndex + 1) % galleryItems.length;
-      updateLightboxContent(lightboxModal);
-    });
-    lightboxModal.querySelector(".prev-button").addEventListener("click", e => {
+    // Conteneur principal pour trap focus
+    const container = document.createElement("div");
+    container.classList.add("lightbox-container");
+    container.tabIndex = 0;
+
+    // Bouton pour fermer
+    const btnClose = document.createElement("button");
+    btnClose.classList.add("close-lightbox");
+    btnClose.setAttribute("aria-label", "Fermer la lightbox");
+    btnClose.textContent = "×";
+    btnClose.addEventListener("click", closeLightbox);
+
+    // Bouton précédent
+    const btnPrev = document.createElement("button");
+    btnPrev.classList.add("prev-button");
+    btnPrev.setAttribute("aria-label", "Média précédent");
+    btnPrev.textContent = "❮";
+    btnPrev.addEventListener("click", e => {
       e.stopPropagation();
       currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
       updateLightboxContent(lightboxModal);
     });
+
+    // Bouton suivant
+    const btnNext = document.createElement("button");
+    btnNext.classList.add("next-button");
+    btnNext.setAttribute("aria-label", "Média suivant");
+    btnNext.textContent = "❯";
+    btnNext.addEventListener("click", e => {
+      e.stopPropagation();
+      currentIndex = (currentIndex + 1) % galleryItems.length;
+      updateLightboxContent(lightboxModal);
+    });
+
+    // Frame image/vidéo + légende
+    const frame = document.createElement("div");
+    frame.classList.add("image-frame");
+
+    const mediaText = document.createElement("div");
+    mediaText.classList.add("lightbox-media-texte");
+
+    const mediaContainer = document.createElement("div");
+    mediaContainer.classList.add("lightbox-media-container");
+
+    const caption = document.createElement("p");
+    caption.id = "lightbox-caption";
+    caption.classList.add("lightbox-caption");
+    caption.setAttribute("role", "status");
+    caption.setAttribute("aria-live", "polite");
+    caption.setAttribute("aria-atomic", "true");
+
+    mediaText.appendChild(mediaContainer);
+    mediaText.appendChild(caption);
+    frame.appendChild(btnPrev);
+    frame.appendChild(mediaText);
+    frame.appendChild(btnNext);
+
+    container.appendChild(btnClose);
+    container.appendChild(frame);
+    lightboxModal.appendChild(container);
+    document.getElementById("lightbox-parent").appendChild(lightboxModal);
+
+    // Clic en dehors de la box = fermeture
     lightboxModal.addEventListener("click", e => {
       if (!e.target.closest(".lightbox-container")) closeLightbox();
     });
+
+    // Gestion du clavier pour trap focus, flèches, escape
+    container.addEventListener("keydown", function(e) {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        return closeLightbox();
+      }
+      if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+        e.preventDefault();
+        currentIndex = e.key === "ArrowLeft"
+          ? (currentIndex - 1 + galleryItems.length) % galleryItems.length
+          : (currentIndex + 1) % galleryItems.length;
+        return updateLightboxContent(lightboxModal);
+      }
+      if (e.key === "Tab") {
+        const focusable = Array.from(
+          lightboxModal.querySelectorAll(
+            "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"
+          )
+        );
+        if (!focusable.length) return e.preventDefault();
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
   }
 
-  // 3) Mettre à jour et afficher
+  // 3) Mise à jour et affichage
   updateLightboxContent(lightboxModal);
   lightboxModal.style.display = "flex";
   lightboxModal.setAttribute("aria-hidden", "false");
   document.getElementById("main").setAttribute("aria-hidden", "true");
 
-  // 4) Focus trap & escape
-  const modalContainer = lightboxModal.querySelector(".lightbox-container");
-  modalContainer.focus();
-  modalContainer.addEventListener("keydown", function(e) {
-    // Navigation flèches…
-    if (e.key === "ArrowLeft") {
-      e.preventDefault();
-      currentIndex = (currentIndex - 1 + galleryItems.length) % galleryItems.length;
-      updateLightboxContent(lightboxModal);
-      return;
-    }
-    if (e.key === "ArrowRight") {
-      e.preventDefault();
-      currentIndex = (currentIndex + 1) % galleryItems.length;
-      updateLightboxContent(lightboxModal);
-      return;
-    }
-
-    // Cycle Tab
-    if (e.key === "Tab") {
-      const focusable = Array.from(
-        lightboxModal.querySelectorAll(
-          "button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])"
-        )
-      );
-      if (!focusable.length) return e.preventDefault();
-      const first = focusable[0];
-      const last  = focusable[focusable.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-      return;
-    }
-
-    // Échap ferme la lightbox et restaure le focus
-    if (e.key === "Escape" || e.key === "Esc") {
-      e.preventDefault();
-      closeLightbox();
-    }
-  });
+  // Trap focus initial
+  lightboxModal.querySelector(".lightbox-container").focus();
 }
 
 /**
