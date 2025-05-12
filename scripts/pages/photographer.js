@@ -1,4 +1,4 @@
-/* global mediaTemplate */
+/* global mediaFactory */
 /* global addModalOpenEventListeners */
 /* global openLightbox */
 
@@ -94,9 +94,9 @@ function updateGallery(mediaList, photographer) {
 
   mediaList.forEach(media => {
     // Utilise le template pour créer la carte média
-    const model = mediaTemplate(media, photographer);
+    const model = mediaFactory(media, photographer);
     const card  = model.getMediaCardDOM();
-    card.setAttribute("tabindex", "0"); // Rendre chaque carte focusable
+    card.setAttribute("tabindex", "0"); 
     gallery.appendChild(card);
   });
 

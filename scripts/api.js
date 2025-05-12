@@ -64,17 +64,4 @@ async function getPhotographers() {
   };
 }
 
-// // Import/export function for fetching data
-// export async function getPhotographers() {
-//     try {
-//       const response = await fetch("../data/photographers.json");
-//       if (!response.ok) {
-//         throw new Error(`HTTP error! Status: ${response.status}`);
-//       }
-//       const data = await response.json(); // Suppose the response is in JSON format
-//       return data; // Return the fetched data
-//     } catch (error) {
-//       console.error("Error fetching table data:", error);
-//       throw error; // Re-throw the error to handle it in the caller
-//     }
-//   }
+

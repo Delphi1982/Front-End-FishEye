@@ -1,4 +1,4 @@
-/* exported mediaTemplate */ // Indique que cette fonction est utilisée dans un autre fichier
+/* exported mediaFactory */ 
 
 /**
  * Crée et renvoie une carte média (image ou vidéo) pour la galerie.
@@ -6,7 +6,7 @@
  * @param {Object} photographer  Les infos du photographe (pour le chemin d’accès)
  * @returns {Object}             Un objet contenant la méthode getMediaCardDOM()
  */
-function mediaTemplate(media, photographer) {
+function mediaFactory(media, photographer) {
   /**
    * Construit le DOM de la carte média
    * @returns {HTMLElement} Le <div> .gallery-item prêt à être inséré en page
